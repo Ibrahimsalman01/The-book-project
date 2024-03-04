@@ -6,7 +6,7 @@ To pull main branch from remote to our local pc, pulling any new changes to our 
 
 
 Creating a new branch to do work into it without changing main branch directly and immediately:
-"git checkout -b ANYNAMEYOUWANT"
+"git checkout -b ANYNAMEYOUWANT
 
 Pushing new work to main branch:
 
@@ -17,3 +17,9 @@ git push origin TESTBRANCHNAME
 ^^^ Will not make new changes to main branch stuff until approved.
 User who makes the push here has to create a pull request in Github.
 Pull Request can be confirmed to be merged and then you can delete the test branch you were working in.
+
+To delete a branch locally on ur pc:
+"git branch -d localBranchName"
+
+Video I watched: https://www.youtube.com/watch?v=MnUd31TvBoU
+
