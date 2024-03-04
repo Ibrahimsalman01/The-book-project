@@ -6,7 +6,7 @@ To pull main branch from remote to our local pc, pulling any new changes to our 
 
 
 Creating a new branch to do work into it without changing main branch directly and immediately:
-"git checkout -b ANYNAMEYOUWANT"
+"git checkout -b ANYNAMEYOUWANT
 
 Pushing new work to main branch:
 
