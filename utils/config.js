@@ -1,3 +1,4 @@
+const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
 // Not sure if this is necessary for the future
@@ -6,19 +7,20 @@ const PASSWORD = process.env.DB_PASSWORD;
 const HOST = process.env.DB_HOST;
 const PORT = process.env.DB_PORT;
 
-const connectionConfig = {
+const connectionOptions = {
   host: HOST,
-  user: USERNAME,     
-  password: PASSWORD,
-  database: 'Books',
   port: PORT,
-  ssl: true
+  dialect: 'postgres',
+  dialectOptions: {
+    ssl: {
+      require: true
+    }
+  }
 };
 
 module.exports = {
   USERNAME,
   PASSWORD,
-  HOST,
   PORT,
-  connectionConfig
+  connectionOptions
 };
