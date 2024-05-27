@@ -10,4 +10,4 @@ This project is currently planned to be free and open source
 
 ## Where can I download the app?
 
-While this project is currently in its earlier stages, the application will be releasing on Android, iOS, and potentially PC!
+While this project is currently in its earlier stages, the application will be releasing on Android, and iOS.
