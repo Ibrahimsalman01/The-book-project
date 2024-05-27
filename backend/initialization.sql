@@ -29,9 +29,9 @@ VALUES 	('The Great Gatsby', 'F. Scott Fitzgerald', 'It tells the story of Jay G
 
 -- stories		
 CREATE TABLE book_stories (
-	book_id 	INT REFERENCES books(book_id) ON DELETE CASCADE,
-	story_id 	SERIAL PRIMARY KEY,
-	story 		TEXT NOT NULL
+	book_id 	INT 	REFERENCES books(book_id) ON DELETE CASCADE,
+	story_id 	SERIAL 	PRIMARY KEY,
+	story 		TEXT 	NOT NULL
 );
 
 INSERT INTO book_stories (book_id, story)
@@ -42,8 +42,8 @@ VALUES 	(1, 'Placeholder story 1'),
 
 
 CREATE TABLE genres (
-	genre_id SERIAL PRIMARY KEY,
-	genre VARCHAR(40) UNIQUE NOT NULL
+	genre_id 	SERIAL PRIMARY KEY,
+	genre 		VARCHAR(40) UNIQUE NOT NULL
 );
 
 INSERT INTO genres (genre)

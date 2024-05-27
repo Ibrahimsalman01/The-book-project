@@ -21,12 +21,14 @@ export const schema = new EntitySchema<BookGenre>({
         bookId: {
             name: 'book_id',
             type: 'int',
+            deleteRule: 'cascade',
             primary: true
         },
         genreId: {
             name: 'genre_id',
             type: 'int',
+            deleteRule: 'cascade',
             primary: true
-        },
+        }
     }
 });
