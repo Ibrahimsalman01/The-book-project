@@ -2,7 +2,7 @@
 
 ## What is it?
 
-The Book Project offers books to read on the fly without needing to download anything!
+The Book Project offers books to read on the fly without needing to download any books onto your device!
 
 ## How much does the app cost?
 
