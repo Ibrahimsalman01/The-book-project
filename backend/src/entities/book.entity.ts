@@ -1,5 +1,11 @@
 import { EntitySchema } from "@mikro-orm/core";
 
+interface BookOptions {
+    bookId?: number;
+    datePublished?: Date;
+    rating?: number;
+}
+
 export class Book {
     bookId?: number;
     title: string;
@@ -9,23 +15,26 @@ export class Book {
     datePublished?: Date;
     rating?: number;
     coverImage: string;
-    // story: string;
+    story: string;
 
     constructor(
-        title: string, author: string, synopsis: string, genres: string[],  coverImage: string,
-        
-        datePublished?: Date, 
-        rating?: number, 
-        bookId?: number
+        title: string, 
+        author: string, 
+        synopsis: string, 
+        genres: string[], 
+        coverImage: string,
+        story: string,
+        options: BookOptions = {}
     ) {
         this.title = title;
         this.author = author;
         this.synopsis = synopsis;
         this.genres = genres;
         this.coverImage = coverImage;
-        this.bookId = bookId; 
-        this.datePublished = datePublished;
-        this.rating = rating;
+        this.story = story;
+        this.bookId = options.bookId;
+        this.datePublished = options.datePublished;
+        this.rating = options.rating;
     }
     
 }
@@ -42,7 +51,7 @@ export const schema = new EntitySchema<Book>({
         title: { type: 'varchar', length: 100, unique: true, nullable: false },
         author: { type: 'varchar', length: 50, nullable: false },
         synopsis: { type: 'text', nullable: false },
-        genres: {type: 'array', nullable: false, persist: false },
+        genres: {type: 'array', persist: false, nullable: false },
         datePublished: {
             name: 'date_published',
             type: 'date',
@@ -61,6 +70,7 @@ export const schema = new EntitySchema<Book>({
             name: 'cover_image',
             type: 'varchar',
             length: 255
-        }
+        },
+        story: { type: 'text', persist: false, nullable: false }
     }
 });
