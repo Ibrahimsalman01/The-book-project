@@ -17,7 +17,7 @@ CREATE TABLE books (
 	synopsis 		TEXT NOT NULL,
 	date_published 	DATE DEFAULT CURRENT_DATE NOT NULL,
 	rating 			DECIMAL(3, 1) CHECK(rating >= 0.0 AND rating <= 10.0) DEFAULT 0.0 NOT NULL,
-	cover_image 	VARCHAR(255) -- will probably need a default book cover
+	cover_image 	VARCHAR(255) -- will need a default book cover
 );
 
 INSERT INTO books (title, author, synopsis, date_published, rating)

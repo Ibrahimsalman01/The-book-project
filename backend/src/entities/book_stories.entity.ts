@@ -1,24 +1,24 @@
 import { EntitySchema } from "@mikro-orm/core";
 
-interface bookStoryOptions {
+interface BookStoryOptions {
     bookId?: number;
     storyId?: number;
 }
 
-export class bookStory {
+export class BookStory {
     bookId?: number;
     storyId?: number;
     story: string;
 
-    constructor(story: string, options: bookStoryOptions = {}) {
+    constructor(story: string, options: BookStoryOptions = {}) {
         this.story = story;
         this.bookId = options.bookId;
         this.storyId = options.storyId;
     }
 }
 
-export const schema = new EntitySchema<bookStory>({
-    class: bookStory,
+export const schema = new EntitySchema<BookStory>({
+    class: BookStory,
     tableName: 'book_stories',
     properties: {
         bookId: {

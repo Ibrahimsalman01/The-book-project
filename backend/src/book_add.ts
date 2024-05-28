@@ -1,8 +1,9 @@
 import config from "./mikro-orm.config";
 import { Book } from "./entities/book.entity";
+import { BookBuilder } from "./entities/book.entity";
 import { Genre } from "./entities/genre.entity";
 import { BookGenre } from "./entities/book_genres.entity";
-import { bookStory } from "./entities/book_stories.entity";
+import { BookStory } from "./entities/book_stories.entity";
 import { MikroORM } from "@mikro-orm/postgresql";
 
 async function addTestBook() {
@@ -21,14 +22,27 @@ async function addTestBook() {
             'path/to/image.png'
         ); */
 
-        const newBook = new Book(
-            'Test 17',
-            'John Doe',
-            'A great book',
-            ["Comedy"],
-            'path/to/image.png',
-            'This is a story'
-        );
+        // const newBook = new Book(
+        //     'Test 17',
+        //     'John Doe',
+        //     'A great book',
+        //     ["Comedy"],
+        //     'path/to/image.png',
+        //     'This is a story'
+        // );
+
+        const bookBuilder = new BookBuilder();
+
+        bookBuilder
+            .setTitle('Test 20')
+            .setAuthor('Johnson Doe')
+            .setSynopsis('5/28/24')
+            .setGenres(["Comedy"])
+            .setCoverImage("some/image.png")
+            .setStory('5/28/24 the story');
+
+        const newBook: Book = bookBuilder.build();
+        console.log(newBook.toString());
 
         await em
             .persist(newBook)
@@ -56,7 +70,7 @@ async function addTestBook() {
                     }
                 }
 
-                const newBookStory = new bookStory(
+                const newBookStory = new BookStory(
                     story, 
                     { bookId: currBookId }
                 );
