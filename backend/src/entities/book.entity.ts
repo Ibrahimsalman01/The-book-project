@@ -1,42 +1,92 @@
 import { EntitySchema } from "@mikro-orm/core";
 
-interface BookOptions {
-    bookId?: number;
-    datePublished?: Date;
-    rating?: number;
+export class Book {
+    bookId!: number; // dont need to fill
+    title!: string;
+    author!: string;
+    synopsis!: string;
+    genres!: string[];
+    datePublished!: Date; // dont need to fill
+    rating!: number; // dont need to fill
+    coverImage!: string;
+    story!: string;
+
+    public toString(): string {
+        return `Book title=${this.title}, author=${this.author}, 
+                synopsis=${this.synopsis}, genres=${this.genres}, 
+                datePublished=${this.datePublished}, rating=${this.rating}, 
+                coverImage=${this.coverImage}`;
+    }
 }
 
-export class Book {
-    bookId?: number;
-    title: string;
-    author: string;
-    synopsis: string;
-    genres: string[];
-    datePublished?: Date;
-    rating?: number;
-    coverImage: string;
-    story: string;
+interface Builder {
+    setTitle(title: string): BookBuilder;
+    setAuthor(author: string): BookBuilder;
+    setSynopsis(synopsis: string): BookBuilder;
+    setGenres(genres: string[]): BookBuilder;
+    setDatePublished(datePublished: Date): BookBuilder; // dont need to set
+    setRating(rating: number): BookBuilder; // dont need to set
+    setCoverImage(coverImage: string): BookBuilder;
+    setStory(story: string): BookBuilder;
+    build(): Book;
+}
 
-    constructor(
-        title: string, 
-        author: string, 
-        synopsis: string, 
-        genres: string[], 
-        coverImage: string,
-        story: string,
-        options: BookOptions = {}
-    ) {
-        this.title = title;
-        this.author = author;
-        this.synopsis = synopsis;
-        this.genres = genres;
-        this.coverImage = coverImage;
-        this.story = story;
-        this.bookId = options.bookId;
-        this.datePublished = options.datePublished;
-        this.rating = options.rating;
+export class BookBuilder implements Builder {
+    declare private book: Book;
+
+    constructor() {
+        this.reset();
+    }
+
+    public reset(): void {
+        this.book = new Book();
+    }
+
+    public setTitle(title: string): BookBuilder {
+        this.book.title = title;
+        return this;
+    }
+
+    public setAuthor(author: string): BookBuilder {
+        this.book.author = author;
+        return this;
+    }
+
+    public setSynopsis(synopsis: string): BookBuilder {
+        this.book.synopsis = synopsis;
+        return this;
+    }
+
+    public setGenres(genres: string[]): BookBuilder {
+        this.book.genres = genres;
+        return this;
     }
     
+    public setDatePublished(datePublished: Date): BookBuilder {
+        this.book.datePublished = datePublished;
+        return this;
+    }
+
+    public setRating(rating: number): BookBuilder {
+        this.book.rating = rating;
+        return this;
+    }
+
+    public setCoverImage(coverImage: string): BookBuilder {
+        this.book.coverImage = coverImage;
+        return this;
+    }
+
+    public setStory(story: string): BookBuilder {
+        this.book.story = story;
+        return this;
+    }
+
+    public build(): Book {
+        const result = this.book;
+        this.reset();
+        return result;
+    }
 }
 
 export const schema = new EntitySchema<Book>({
@@ -63,7 +113,7 @@ export const schema = new EntitySchema<Book>({
             precision: 3, 
             scale: 1,
             check: 'rating >= 0.0 AND rating <= 10.0',
-            default: 0,
+            default: 0.0,
             nullable: false
         },
         coverImage: {
