@@ -103,7 +103,7 @@ export const schema = new EntitySchema<Book>({
         title: { type: 'varchar', length: 100, unique: true, nullable: false },
         author: { type: 'varchar', length: 50, nullable: false },
         synopsis: { type: 'text', nullable: false },
-        genres: {type: 'array', persist: false, nullable: false },
+        genres: { type: 'array', persist: false, nullable: false },
         datePublished: {
             name: 'date_published',
             type: 'date',

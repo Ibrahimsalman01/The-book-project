@@ -6,10 +6,10 @@ export class DatabaseService {
     private static em: EntityManager;
     private static orm: MikroORM;
 
-    constructor() {
-    }
+    constructor() {}
 
     public async init(): Promise<void> {
+        console.log('problem 2');
         DatabaseService.orm = await MikroORM.init(config); 
         DatabaseService.em = DatabaseService.orm.em.fork();
     }
