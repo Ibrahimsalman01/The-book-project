@@ -5,10 +5,13 @@ import { Genre } from "./entities/genre.entity";
 import { BookGenre } from "./entities/book_genres.entity";
 import { BookStory } from "./entities/book_stories.entity";
 import { MikroORM } from "@mikro-orm/postgresql";
+import { Services, initORM } from "./db";
+import { BookRepository } from "./services/book_repository";
+import { DatabaseService } from "./services/database_services";
 
 async function addTestBook() {
-    const orm = await MikroORM.init(config);
-    const em = orm.em.fork();
+    /* const orm = await MikroORM.init(config);
+    const em = orm.em.fork(); */
 
     try {
         /* const newBook = new Book(
@@ -31,57 +34,35 @@ async function addTestBook() {
         //     'This is a story'
         // );
 
-        const bookBuilder = new BookBuilder();
+
+        
+        const dbService = new DatabaseService();
+        await dbService.init()
+
+        const bookBuilder = new BookBuilder(); 
 
         bookBuilder
-            .setTitle('Test 20')
-            .setAuthor('Johnson Doe')
-            .setSynopsis('5/28/24')
-            .setGenres(["Comedy"])
+            .setTitle('Test 65')
+            .setAuthor('Giovanni Doe')
+            .setSynopsis('5/31/24')
+            .setGenres(["Slice of Life"])
             .setCoverImage("some/image.png")
-            .setStory('5/28/24 the story');
+            .setStory('5/31/24 the story test');
 
         const newBook: Book = bookBuilder.build();
-        console.log(newBook.toString());
 
-        await em
-            .persist(newBook)
-            .flush()
-            .then(async () => {
-                const currBookId = newBook.bookId;
-                const genresArray = newBook.genres;
-                const story = newBook.story;
-            
-                for (const currGenre of genresArray) {
-                    let checkGenre = await em.findOne(Genre, { genre: currGenre });
-                    if (!checkGenre) { //if genre does not exist
-                        const newGenre = new Genre(currGenre);
-                        await em
-                        .persist(newGenre)
-                        .flush() //add genre to genre table
-                        .then(async () => {
-                            // ! operator to TS that those values can not be null
-                            const bookGenre = new BookGenre(currBookId!, newGenre.genreId!); //create book genre
-                            await em.persist(bookGenre).flush(); //push book genre to table
-                        });
-                    } else { //if genre exists
-                        const bookGenre = new BookGenre(currBookId!, checkGenre.genreId!);
-                        await em.persist(bookGenre).flush();
-                    }
-                }
+        
+        const newBookRepo : BookRepository = new BookRepository();
+        await newBookRepo.pushBook(newBook);
+        await newBookRepo.pushGenres(newBook);
+        await newBookRepo.pushStories(newBook);
 
-                const newBookStory = new BookStory(
-                    story, 
-                    { bookId: currBookId }
-                );
-                await em.persist(newBookStory).flush();
-            });
+        await dbService.closeORM();
+        
 
     } catch (error) {
         console.error(`Unable to add new book due to: ${error}`);
-    } finally {
-        await orm.close(true);
-    }
+    } 
 }
 
 addTestBook();

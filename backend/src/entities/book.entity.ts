@@ -1,5 +1,6 @@
 import { EntitySchema } from "@mikro-orm/core";
 
+
 export class Book {
     bookId!: number; // dont need to fill
     title!: string;
@@ -87,6 +88,7 @@ export class BookBuilder implements Builder {
         this.reset();
         return result;
     }
+    
 }
 
 export const schema = new EntitySchema<Book>({
