@@ -12,6 +12,13 @@ export const Books = pgTable('books', {
 	coverImage: varchar('cover_image', { length: 255 })
 });
 
+
+export type pushedBook = typeof Books.$inferInsert;
+export type completeBook = pushedBook & { //Adding genres and stories this way so they do not get attempted to be pushed to Books table
+    genres: string[];
+    story: string;
+}  
+
 export const BookRelations = relations(Books, ({ many }) => ({
 	bookGenres: many(BookGenres)
 }));
@@ -44,3 +51,9 @@ export const BookGenresRelations = relations(BookGenres, ({ one }) => ({
 		references: [Genres.genreId]
 	})
 }));
+
+export const BookStories = pgTable('book_stories', {
+	bookId: integer('book_id').references(() => Books.bookId, { onDelete: 'cascade' }),
+	storyId: serial('story_id').primaryKey(),
+	story: text('story').notNull() 
+});
