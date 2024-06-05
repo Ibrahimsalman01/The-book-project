@@ -1,6 +1,6 @@
 /**
-    Use this to initialize the database
-    (Must do manually, initialization is not manual)
+  Use this to initialize the database
+  (Must do manually, initialization is not manual)
 **/
 
 -- DROP TABLE IF EXISTS book_genres;
