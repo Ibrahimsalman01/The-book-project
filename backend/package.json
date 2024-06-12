@@ -16,6 +16,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.31.1",
     "pg": "^8.11.5"

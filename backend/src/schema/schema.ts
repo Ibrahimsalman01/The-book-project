@@ -57,3 +57,13 @@ export const BookStories = pgTable('book_stories', {
 	storyId: serial('story_id').primaryKey(),
 	story: text('story').notNull() 
 });
+
+export const Users = pgTable('users', {
+	userId: serial('user_id').primaryKey(),
+	username: varchar('username', { length: 64 }).unique().notNull(),
+	email: varchar('email', { length: 120 }).unique().notNull(),
+	password: varchar('password_hash', { length: 256 }).notNull(),
+
+})
+
+export type completeUser = typeof Users.$inferInsert;
