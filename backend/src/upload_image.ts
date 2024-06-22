@@ -7,7 +7,7 @@ const file = readFileSync(filePath);
 
 const uploadImage = async () => {
   try {
-    const storageRef = ref(storage, 'test-series/this-is-a-test.png');
+    const storageRef = ref(storage, 'test-series/bao-test-image.png');
     const metadata = { contentType: 'image/png' };
 
     const uploadTask = uploadBytesResumable(storageRef, file, metadata);
@@ -31,4 +31,4 @@ const uploadImage = async () => {
   }
 };
 
-uploadImage();
+//uploadImage();
