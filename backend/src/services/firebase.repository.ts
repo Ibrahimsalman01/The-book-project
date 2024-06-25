@@ -1,6 +1,6 @@
 import { storage } from "../utils/firebase.config.js";
 import { readFileSync, existsSync } from "fs";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL, listAll } from "firebase/storage";
 
 export class FirebaseRepository {
   public async uploadImage(filePath: string): Promise<void> {
@@ -37,10 +37,28 @@ export class FirebaseRepository {
       const downloadURL = await getDownloadURL(storageRef);
       console.log('Download URL:', downloadURL);
       return downloadURL;
+    } catch (error) {
+      console.error('Error uploading image: ', error);
+    } 
+  }
+
+  public async getChapter(series: string, chapterNum: string): Promise<string[]> {
+    try {
+      const seriesRef = ref(storage, `${series}`);
+      const seriesList: string[] = [];
+      const res = await listAll(seriesRef);
+
+      for (const itemRef of res.items) {
+        if (itemRef.toString().includes(`_ch${chapterNum}_`)) {
+          const image = await this.getImage(itemRef.toString());
+          seriesList.push(image);
+        }
+      }
+
+      return seriesList;
+    } catch (error) {
+      console.error('Error retrieving chapter: ', error);
     }
-    catch (error) {
-    console.error('Error uploading image: ', error);
-  } 
-}
+  }
 
 }
