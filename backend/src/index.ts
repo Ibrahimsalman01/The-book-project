@@ -5,7 +5,10 @@ import { BookRepository } from "./services/book.repository.js";
 import { BookBuilder } from "./services/book.builder.js";
 import { UserRepository } from "./services/user.repository.js";
 import { UserBuilder } from "./services/user.builder.js";
+import { FirebaseRepository } from "./services/firebase.repository.js";
 import { DatabaseService } from "./utils/database.config.js";
+import { readFileSync } from "fs";
+
 
 DatabaseService.drizzleInit();
 
@@ -28,8 +31,17 @@ async function test() {
 
     const userRepo = new UserRepository();
 
+    const fbRepo = new FirebaseRepository();
+
+
+    //const filePath = 'C:/Users/baole/Desktop/The-book-project/backend/images/hsr.png';
+    //await fbRepo.uploadImage(filePath)
+
+	const imagePath = 'test-series/bao-image-test.png'
+	await fbRepo.getImage(imagePath)
+
     //await userRepo.registerUser(newUser)
-    await userRepo.loginUser("bao@gmail.com", "1234")
+    //await userRepo.loginUser("bao@gmail.com", "1234")
 
 
 		//const bookRepo = new BookRepository();
