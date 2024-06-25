@@ -23,13 +23,13 @@ async function test() {
 		.setStory('This is the story of the new book.')
 		.build(); */
 
-    const newUser = new UserBuilder()
-    .setUsername("baoinadaze")
-    .setEmail("bao@gmail.com")
-    .setPassword("1234")
-    .build();
+    // const newUser = new UserBuilder()
+    // .setUsername("baoinadaze")
+    // .setEmail("bao@gmail.com")
+    // .setPassword("1234")
+    // .build();
 
-    const userRepo = new UserRepository();
+    // const userRepo = new UserRepository();
 
     const fbRepo = new FirebaseRepository();
 
@@ -37,22 +37,23 @@ async function test() {
     //const filePath = 'C:/Users/baole/Desktop/The-book-project/backend/images/hsr.png';
     //await fbRepo.uploadImage(filePath)
 
-	const imagePath = 'test-series/bao-image-test.png'
-	await fbRepo.getImage(imagePath)
+    // const imagePath = 'test-series/bao-image-test.png';
+    // await fbRepo.getImage(imagePath);
+    const chapters = await fbRepo.getChapter('test series 2', '02');
+    console.log(chapters);
 
-    //await userRepo.registerUser(newUser)
-    //await userRepo.loginUser("bao@gmail.com", "1234")
+    //await userRepo.registerUser(newUser);
+    //await userRepo.loginUser("bao@gmail.com", "1234");
 
 
-		//const bookRepo = new BookRepository();
+		// const bookRepo = new BookRepository();
 		// const test1 = await bookRepo.getAllBooks();
 		// const test2 = await bookRepo.getBook(1);
-		// console.log(test1)
+		// console.log(test1);
 
 
-
-    //const deletedBookId = await bookRepo.deleteBook(104);
-    //console.log(deletedBookId);
+    // const deletedBookId = await bookRepo.deleteBook(104);
+    // console.log(deletedBookId);
 		// await bookRepo.createBook(newBook); // createBook should return the book so we can add to the frontend
 		DatabaseService.closePool();
 	} catch (error) {
