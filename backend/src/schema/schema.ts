@@ -1,4 +1,4 @@
-import { integer, pgTable, serial, varchar, text, date, decimal, primaryKey } from "drizzle-orm/pg-core";
+import { integer, pgTable, serial, varchar, text, date, decimal, primaryKey, uniqueIndex } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
 
 // schemas
@@ -67,3 +67,16 @@ export const Users = pgTable('users', {
 })
 
 export type completeUser = typeof Users.$inferInsert;
+
+export const Novels = pgTable('novels', {
+  novelId: serial('novel_id').primaryKey(),
+  seriesName: varchar('series_name', { length: 255 }).notNull(),
+  chapterNumber: integer('chapter_number').notNull(),
+  pageNumber: integer('page_number').notNull(),
+  fileUrl: text('file_url').notNull()
+}, (table) => {
+  return {
+    uniqueIndex: uniqueIndex('series_chapter_page_unique_idx').on(table.seriesName, 
+      table.chapterNumber, table.pageNumber)
+  };
+});

@@ -8,6 +8,7 @@ import { UserBuilder } from "./services/user.builder.js";
 import { FirebaseRepository } from "./services/firebase.repository.js";
 import { DatabaseService } from "./utils/database.config.js";
 import { readFileSync } from "fs";
+import { NovelRepository } from "./services/novel.repository.js";
 
 
 DatabaseService.drizzleInit();
@@ -39,11 +40,17 @@ async function test() {
 
     // const imagePath = 'test-series/bao-image-test.png';
     // await fbRepo.getImage(imagePath);
-    const chapters = await fbRepo.getChapter('test series 2', '02');
-    console.log(chapters);
+    // const chapters = await fbRepo.getChapter('test series 2', '02');
+    // console.log(chapters);
 
     //await userRepo.registerUser(newUser);
     //await userRepo.loginUser("bao@gmail.com", "1234");
+
+    const novelRepo = new NovelRepository();
+    // const chapter = await novelRepo.getChapter(1);
+    // console.log(chapter);
+
+    await novelRepo.uploadChapter('test series 2');
 
 
 		// const bookRepo = new BookRepository();
