@@ -2,8 +2,8 @@ import { storage } from "../utils/firebase.config.js";
 import { readFileSync, existsSync } from "fs";
 import { ref, uploadBytesResumable, getDownloadURL, listAll } from "firebase/storage";
 
-export class FirebaseRepository {
-  public async uploadImage(filePath: string): Promise<void> {
+export class BookRepository {
+  public async createImage(filePath: string): Promise<void> {
     try {
       
       const file = readFileSync(filePath);

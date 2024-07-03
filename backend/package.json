@@ -17,10 +17,6 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@azure/storage-blob": "^12.23.0",
-    "@azure/storage-file-datalake": "^12.22.0",
-    "@azure/storage-file-share": "^12.23.0",
-    "@azure/storage-queue": "^12.22.0",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
