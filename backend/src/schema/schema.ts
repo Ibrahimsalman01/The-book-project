@@ -71,12 +71,11 @@ export type completeUser = typeof Users.$inferInsert;
 export const Novels = pgTable('novels', {
   novelId: serial('novel_id').primaryKey(),
   seriesName: varchar('series_name', { length: 255 }).notNull(),
-  chapterNumber: integer('chapter_number').notNull(),
-  pageNumber: integer('page_number').notNull(),
-  fileUrl: text('file_url').notNull()
-}, (table) => {
-  return {
-    uniqueIndex: uniqueIndex('series_chapter_page_unique_idx').on(table.seriesName, 
-      table.chapterNumber, table.pageNumber)
-  };
+  //will alter table to add more data in future
+});
+
+export const Chapters = pgTable('chapters', {
+	chapterId: serial('chapter_id').primaryKey(),
+	novelId: integer('novel_id').references(() => Novels.novelId, { onDelete: 'cascade' }),
+	chapterNumber: integer('chapter_number').notNull(),
 });
