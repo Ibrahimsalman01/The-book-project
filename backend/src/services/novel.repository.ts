@@ -1,5 +1,5 @@
 import { DatabaseService } from "../utils/database.config.js";
-import { Novels } from "../schema/schema.js";
+import { Novels, Chapters } from "../schema/schema.js";
 import { getDownloadURL, listAll, ref } from "firebase/storage";
 import { storage } from "../utils/firebase.config.js";
 import { and, eq } from "drizzle-orm/pg-core/expressions";
@@ -37,24 +37,53 @@ export class NovelRepository {
     }
   }
 
-  public async getChapter(id: number) {
+  public async getllNovels() {
     try {
-      const chapterQuery = await this.db
+      const novelQuery = await this.db.select().from(Novels) ;
+      return novelQuery;
+    }
+    catch (error) {
+      console.error(`Error retrieving novels: ${error}`);
+    }
+  }
+
+  public async getChapter(novelId: number, chapterNumber: number) {
+    try {
+      const novelQuery = await this.db
         .select()
-        .from(Novels)
+        .from(Novels) 
         .where(
-          eq(Novels.novelId, id)
+          eq(Novels.novelId, novelId)
         );
 
-      const chapter = await this.findChapter(
-        chapterQuery[0].seriesName, 
+        const chapterQuery = await this.db
+        .select()
+        .from(Chapters) 
+        .where(
+          eq(Chapters.chapterNumber, chapterNumber)
+        );
+
+
+      const pages = await this.findChapter(
+        novelQuery[0].seriesName, 
         chapterQuery[0].chapterNumber
       );
+    
+      return pages;
 
-      return chapter;
     } catch (error) {
       console.error(`Error retrieving chapter: ${error}`);
     }
+  }
+
+  public async getAllNovels(): Promise<Object[]> {
+    const allNovels = await this.db
+        .select()
+        .from(Novels);
+
+    console.log(allNovels)
+
+    return null;
   }
 
   private async folderExists(seriesName: string): Promise<boolean> {

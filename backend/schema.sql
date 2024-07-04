@@ -72,3 +72,37 @@ VALUES  (1, 1),
         (3, 6),
         (3, 7),
         (4, 8);
+
+CREATE TABLE novels (
+    novel_id SERIAL PRIMARY KEY,
+    series_name VARCHAR(255) UNIQUE NOT NULL,
+    summary TEXT NOT NULL
+);
+
+CREATE TABLE chapters (
+    chapter_id SERIAL,
+    novel_id INT REFERENCES novels(novel_id) ON DELETE CASCADE,
+    chapter_number INT NOT NULL,
+    PRIMARY KEY (chapter_id, novel_id)
+);
+
+-- Create the function to increment chapter_number
+CREATE OR REPLACE FUNCTION increment_chapter_number()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- If chapter_number is not provided, calculate it
+    IF NEW.chapter_number IS NULL THEN
+        -- Find the current maximum chapter number for the given novel_id
+        SELECT COALESCE(MAX(chapter_number), 0) + 1 INTO NEW.chapter_number
+        FROM chapters
+        WHERE novel_id = NEW.novel_id;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create the trigger to call the function before insert
+CREATE TRIGGER set_chapter_number
+BEFORE INSERT ON chapters
+FOR EACH ROW
+EXECUTE FUNCTION increment_chapter_number();

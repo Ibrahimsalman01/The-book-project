@@ -47,10 +47,9 @@ async function test() {
     //await userRepo.loginUser("bao@gmail.com", "1234");
 
     const novelRepo = new NovelRepository();
-    // const chapter = await novelRepo.getChapter(1);
-    // console.log(chapter);
+    const chapter = await novelRepo.getAllNovels();
 
-    await novelRepo.uploadChapter('test series 2');
+    //await novelRepo.uploadChapter('test series 2');
 
 
 		// const bookRepo = new BookRepository();

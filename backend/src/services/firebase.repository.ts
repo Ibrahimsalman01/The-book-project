@@ -60,5 +60,5 @@ export class FirebaseRepository {
       console.error('Error retrieving chapter: ', error);
     }
   }
-
+  
 }
