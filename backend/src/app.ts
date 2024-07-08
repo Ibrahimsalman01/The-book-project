@@ -1,5 +1,5 @@
 import e from "express";
-import { DatabaseService } from "./utils/database.config.js";
+import { DatabaseService } from "./utils/config.js";
 import { FirebaseRepository } from "./services/firebase.repository.js";
 import { NovelRepository } from "./services/novel.repository.js";
 import dotenv from "dotenv";
@@ -25,7 +25,5 @@ app.get('/novels/:id/:cId', async (req, res) => {
   res.send(result);
 });
 
-const PORT = process.env.APP_PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on PORT ${PORT}`);
-});
+
+export { app };

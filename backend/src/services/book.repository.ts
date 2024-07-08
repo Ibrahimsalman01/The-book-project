@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Books, completeBook, Genres, BookGenres, BookStories } from '../schema/schema.js';
 import { sql, getTableColumns, eq  } from 'drizzle-orm';
-import { DatabaseService } from "../utils/database.config.js";
+import { DatabaseService } from "../utils/config.js";
 
 interface BookObject {
   bookId: number;
