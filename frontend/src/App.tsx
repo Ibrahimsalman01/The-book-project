@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
 import { getChapter } from "../services/novels";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import "./App.css";
 
 const App = () => {
-  const [ novelChapter, setNovelChapter ] = useState<string[]>([]);
+  const [ chapter, setChapter ] = useState<string[]>([]);
 
   const getNovelChapter = useCallback(async () => {
     const response = await getChapter(1, 1);
-    setNovelChapter(response);
+    setChapter(response);
   }, []);
 
   useEffect(() => {
@@ -14,14 +17,24 @@ const App = () => {
   }, [getNovelChapter]);
 
   return (
-    <div>
-      Hello World
+    <div className="chapter-page">
+      <div className="top-bar">
+        The Book Project
 
-      {
-        novelChapter.map((chapter, index) => (
-          <img key={index} src={chapter} alt={`Chapter ${index + 1}`} />
-        ))
-      }
+        <button>prev chapter</button>
+        <button>next chapter</button>
+      </div>
+      <div className="chapter">
+        {
+          chapter.map((page, index) => (
+            <img 
+              key={index} 
+              src={page} 
+              alt={`Page ${index + 1}`}
+            />
+          ))
+        }
+      </div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Users, completeUser } from '../schema/schema.js';
 import { sql, getTableColumns, eq  } from 'drizzle-orm';
-import { DatabaseService } from "../utils/database.config.js";
+import { DatabaseService } from "../utils/config.js";
 import bcrypt from 'bcrypt';
 
 export class UserRepository {

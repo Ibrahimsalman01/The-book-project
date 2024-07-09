@@ -1,4 +1,4 @@
-import { DatabaseService } from "../utils/database.config.js";
+import { DatabaseService } from "../utils/config.js";
 import { Novels, Chapters } from "../schema/schema.js";
 import { getDownloadURL, listAll, ref } from "firebase/storage";
 import { storage } from "../utils/firebase.config.js";
