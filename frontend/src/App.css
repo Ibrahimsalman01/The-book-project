@@ -1,3 +1,7 @@
+body {
+  background-color: #3F4042;
+}
+
 .chapter {
   display: flex;
   flex-direction: column;
@@ -6,6 +10,12 @@
 
 .chapter img {
   margin-bottom: 10px;
+}
+
+.chapter-buttons {
+  display: flex;
+  justify-content: center;
+  margin: 10px auto 10px auto;
 }
 
 .top-bar {
@@ -17,3 +27,4 @@
   margin: 0px;
   padding: 7px;
 }
+

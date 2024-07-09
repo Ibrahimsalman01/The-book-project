@@ -3,6 +3,7 @@ import { Novels, Chapters } from "../schema/schema.js";
 import { getDownloadURL, listAll, ref } from "firebase/storage";
 import { storage } from "../utils/firebase.config.js";
 import { and, eq } from "drizzle-orm/pg-core/expressions";
+import { count } from 'drizzle-orm'
 
 export class NovelRepository {
   private db = DatabaseService.drizzleInit();
@@ -47,6 +48,24 @@ export class NovelRepository {
     }
   }
 
+  public async getTotalChapters(novelId: number) {
+    try {
+      const countQuery = await this.db
+        .select({ count: count(Chapters.chapterId) })
+        .from(Chapters)
+        .where(
+          eq(Chapters.novelId, novelId)
+        );
+
+      const totalChapters = countQuery[0].count;
+      console.log(totalChapters);
+      return totalChapters;
+    } catch (error) {
+      console.error(`Error retrieving total chapters: ${error}`);
+      throw error;
+    }
+  }
+
   public async getChapter(novelId: number, chapterNumber: number) {
     try {
       const novelQuery = await this.db
@@ -69,7 +88,11 @@ export class NovelRepository {
         chapterQuery[0].chapterNumber
       );
     
-      return pages;
+      return {
+        novelInfo: novelQuery[0],
+        chapterInfo: chapterQuery[0],
+        pages: pages
+      };
 
     } catch (error) {
       console.error(`Error retrieving chapter: ${error}`);
