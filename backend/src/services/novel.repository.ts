@@ -5,6 +5,14 @@ import { storage } from "../utils/firebase.config.js";
 import { and, eq } from "drizzle-orm/pg-core/expressions";
 import { count } from 'drizzle-orm'
 
+export interface novelObject {
+  novelId: number,
+  chapterId: number,
+  seriesName: string,
+  chapterNumber: number,
+  pages: string[]
+}
+
 export class NovelRepository {
   private db = DatabaseService.drizzleInit();
 
@@ -58,7 +66,6 @@ export class NovelRepository {
         );
 
       const totalChapters = countQuery[0].count;
-      console.log(totalChapters);
       return totalChapters;
     } catch (error) {
       console.error(`Error retrieving total chapters: ${error}`);
@@ -75,25 +82,27 @@ export class NovelRepository {
           eq(Novels.novelId, novelId)
         );
 
-        const chapterQuery = await this.db
+      const chapterQuery = await this.db
         .select()
         .from(Chapters) 
         .where(
           eq(Chapters.chapterNumber, chapterNumber)
         );
 
-
       const pages = await this.findChapter(
         novelQuery[0].seriesName, 
         chapterQuery[0].chapterNumber
       );
-    
-      return {
-        novelInfo: novelQuery[0],
-        chapterInfo: chapterQuery[0],
-        pages: pages
+
+      const chapter: novelObject = {
+        novelId: novelQuery[0].novelId,
+        chapterId: chapterQuery[0].chapterId,
+        seriesName: novelQuery[0].seriesName,
+        chapterNumber: chapterQuery[0].chapterNumber,
+        pages
       };
 
+      return chapter;
     } catch (error) {
       console.error(`Error retrieving chapter: ${error}`);
     }
@@ -101,8 +110,8 @@ export class NovelRepository {
 
   public async getAllNovels(): Promise<Object[]> {
     const allNovels = await this.db
-        .select()
-        .from(Novels);
+      .select()
+      .from(Novels);
 
     console.log(allNovels)
 

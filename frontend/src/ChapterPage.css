@@ -1,5 +1,5 @@
 body {
-  background-color: #3F4042;
+  background-color: #292828;
 }
 
 .chapter {
@@ -12,7 +12,7 @@ body {
   margin-bottom: 10px;
 }
 
-.chapter-buttons {
+.chapter-navigation {
   display: flex;
   justify-content: center;
   margin: 10px auto 10px auto;
@@ -28,3 +28,7 @@ body {
   padding: 7px;
 }
 
+.series-info {
+  color: white;
+  font-size: x-large;
+}
