@@ -74,16 +74,18 @@ VALUES  (1, 1),
         (4, 8);
 
 CREATE TABLE novels (
-    novel_id SERIAL PRIMARY KEY,
-    series_name VARCHAR(255) UNIQUE NOT NULL,
-    summary TEXT NOT NULL
+  novel_id SERIAL PRIMARY KEY,
+  series_name VARCHAR(255) UNIQUE NOT NULL,
+  summary TEXT NOT NULL,
+	author VARCHAR(100) NOT NULL,
+	rating DECIMAL(3, 1) CHECK(rating >= 0.0 AND rating <= 10.0) DEFAULT 0.0 NOT NULL
 );
 
 CREATE TABLE chapters (
-    chapter_id SERIAL,
-    novel_id INT REFERENCES novels(novel_id) ON DELETE CASCADE,
-    chapter_number INT NOT NULL,
-    PRIMARY KEY (chapter_id, novel_id)
+  chapter_id SERIAL,
+  novel_id INT REFERENCES novels(novel_id) ON DELETE CASCADE,
+  chapter_number INT NOT NULL,
+  PRIMARY KEY (chapter_id, novel_id)
 );
 
 -- Create the function to increment chapter_number

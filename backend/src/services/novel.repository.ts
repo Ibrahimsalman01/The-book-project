@@ -6,15 +6,27 @@ import { and, eq } from "drizzle-orm/pg-core/expressions";
 import { count } from 'drizzle-orm'
 
 export interface novelObject {
-  novelId: number,
-  chapterId: number,
-  seriesName: string,
-  chapterNumber: number,
-  pages: string[]
-}
+  novelId: number;
+  chapterId: number;
+  seriesName: string;
+  chapterNumber: number;
+  pages: string[];
+};
+
+interface novelInfoObject {
+  novelId: number;
+  coverImage: string;
+  seriesName: string;
+  summary: string;
+  author: string;
+  rating: string;
+  genres: string[];
+  chapters: number[];
+};
 
 export class NovelRepository {
   private db = DatabaseService.drizzleInit();
+  private storageUrl: string = 'gs://the-book-project-ccf55.appspot.com';
 
   private async getImage(imagePath: string): Promise<string> {  
     try {
@@ -48,7 +60,7 @@ export class NovelRepository {
 
   public async getllNovels() {
     try {
-      const novelQuery = await this.db.select().from(Novels) ;
+      const novelQuery = await this.db.select().from(Novels);
       return novelQuery;
     }
     catch (error) {
@@ -105,6 +117,41 @@ export class NovelRepository {
       return chapter;
     } catch (error) {
       console.error(`Error retrieving chapter: ${error}`);
+    }
+  }
+
+  private async getCoverImage() {}
+
+  // this function is pretty long
+  // split cover image retrieval logic into definition above
+  public async getNovelInfo(novelId: number): Promise<object> {
+    try {
+      const novelQuery = await this.db
+        .select()
+        .from(Novels)
+        .where(eq(Novels.novelId, novelId));
+
+      const chapterQuery = await this.db
+        .select()
+        .from(Chapters)
+        .where(eq(Chapters.novelId, novelId));
+
+      const coverImage = await this.getImage(`${this.storageUrl}/${novelQuery[0].seriesName}/${novelQuery[0].seriesName}_cover.jpg`);
+      
+      const seriesObject: novelInfoObject = {
+        novelId: novelQuery[0].novelId,
+        coverImage,
+        seriesName: novelQuery[0].seriesName,
+        summary: novelQuery[0].summary,
+        author: novelQuery[0].author,
+        rating: novelQuery[0].rating,
+        genres: ['genre 1', 'genre 2'],
+        chapters: [1]
+      };
+
+      return seriesObject;
+    } catch (error) {
+      console.error(`Error trying to retrieve series info: ${error}`);
     }
   }
 

@@ -71,6 +71,9 @@ export type completeUser = typeof Users.$inferInsert;
 export const Novels = pgTable('novels', {
   novelId: serial('novel_id').primaryKey(),
   seriesName: varchar('series_name', { length: 255 }).notNull(),
+  author: varchar('author', { length: 100 }).notNull(),
+  summary: text('summary').notNull(),
+  rating: decimal('rating', { precision: 3, scale: 1 }).default(sql`0.0`).notNull()
   //will alter table to add more data in future
 });
 
