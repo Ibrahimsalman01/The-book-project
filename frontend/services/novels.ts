@@ -23,3 +23,13 @@ export async function getTotalChapters(novelId: number): Promise<number> {
     return 0;
   }
 }
+
+export async function getNovelPageInfo(novelId: number): Promise<object> {
+  try {
+    const response = await axios.get(`http://localhost:3000/novelInfo/${novelId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error trying to retrieve novel info: ${error}`);
+    throw error;
+  }
+}
