@@ -40,4 +40,15 @@ app.get('/novelTotalChapters/:id', async (req, res) => {
   }
 });
 
+app.get('/novelInfo/:id', async (req, res) => {
+  const novelRepo = new NovelRepository();
+  try {
+    const result = await novelRepo.getNovelInfo(Number(req.params.id));
+    res.json(result);
+  } catch (error) {
+    console.error(`Error trying to GET series info for novelId ${req.params.id}: ${error}`);
+    throw error;
+  }
+});
+
 export { app };
