@@ -21,7 +21,6 @@ interface novelInfoObject {
   author: string;
   rating: string;
   genres: string[];
-  chapters: number[];
 };
 
 export class NovelRepository {
@@ -122,8 +121,7 @@ export class NovelRepository {
 
   private async getCoverImage() {}
 
-  // this function is pretty long
-  // split cover image retrieval logic into definition above
+  // genres need to be set up similarly to how books were set up
   public async getNovelInfo(novelId: number): Promise<object> {
     try {
       const novelQuery = await this.db
@@ -136,6 +134,8 @@ export class NovelRepository {
         .from(Chapters)
         .where(eq(Chapters.novelId, novelId));
 
+      console.log(chapterQuery);
+
       const coverImage = await this.getImage(`${this.storageUrl}/${novelQuery[0].seriesName}/${novelQuery[0].seriesName}_cover.jpg`);
       
       const seriesObject: novelInfoObject = {
@@ -145,8 +145,7 @@ export class NovelRepository {
         summary: novelQuery[0].summary,
         author: novelQuery[0].author,
         rating: novelQuery[0].rating,
-        genres: ['genre 1', 'genre 2'],
-        chapters: [1]
+        genres: ['genre 1', 'genre 2']
       };
 
       return seriesObject;
