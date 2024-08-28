@@ -134,8 +134,6 @@ export class NovelRepository {
         .from(Chapters)
         .where(eq(Chapters.novelId, novelId));
 
-      console.log(chapterQuery);
-
       const coverImage = await this.getImage(`${this.storageUrl}/${novelQuery[0].seriesName}/${novelQuery[0].seriesName}_cover.jpg`);
       
       const seriesObject: novelInfoObject = {

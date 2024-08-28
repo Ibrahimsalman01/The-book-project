@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect, useCallback } from "react";
+import { Link, useParams } from "react-router-dom";
 import { getNovelPageInfo, getTotalChapters } from "../services/novels";
 
 interface novelInfoObject {
@@ -14,22 +15,22 @@ interface novelInfoObject {
 }
 
 const SeriesPage = () => {
+  const { novelId } = useParams<{ novelId: string }>();
   const [novelInfo, setNovelInfo] = useState<novelInfoObject>();
   const [totalChapters, setTotalChapters] = useState(0);
 
   const getNovelPage = useCallback(async () => {
     try {
-      const novelPageObj = await getNovelPageInfo(1);
-      console.log(novelPageObj);
+      const novelPageObj = await getNovelPageInfo(Number(novelId));
       setNovelInfo(novelPageObj as novelInfoObject);
     } catch (error) {
       console.error(`Could not get Novel Page info: ${error}`);
     }
-  }, []);
+  }, [novelId]);
 
   const fetchTotalChapters = async () => {
     try {
-      const total = await getTotalChapters(1);
+      const total = await getTotalChapters(Number(novelId));
       setTotalChapters(total);
     } catch (error) {
       console.error('Error fetching total chapters:', error);
@@ -37,27 +38,39 @@ const SeriesPage = () => {
   };
 
   useEffect(() => {
-    fetchTotalChapters();
-    getNovelPage();
-  }, [getNovelPage]);
+    if (novelId) {
+      fetchTotalChapters();
+      getNovelPage();
+    }
+  }, [novelId, getNovelPage]);
 
   return (
     <div className="series-page">
-      <div className="series-info">
-        <h1>{novelInfo?.seriesName}</h1>
-        <img src={novelInfo?.coverImage} /> <br />
-        Author {novelInfo?.author}
-        Summary {novelInfo?.summary}
-        Rating {novelInfo?.rating}
-      </div>
-      <h2>Chapter list</h2>
-      <div className="chapter-list">
-        <ul>
-          {Array.from({ length: totalChapters }, (_, i) => i + 1).map(num => (
-            <li key={num}>Chapter {num}</li>
-          ))}
-        </ul>
-      </div>
+      {novelInfo? (
+        <>
+          <div className="series-info">
+            <h1>{novelInfo?.seriesName}</h1>
+            <img src={novelInfo?.coverImage} /> <br />
+            <p>Author {novelInfo?.author}</p>
+            <p>Summary {novelInfo?.summary}</p>
+            <p>Rating {novelInfo?.rating}</p>
+          </div>
+          <h2>Chapter list</h2>
+          <div className="chapter-list">
+            <ul>
+              {Array.from({ length: totalChapters }, (_, i) => i + 1).map(num => (
+                <li key={num}>
+                  <Link to={`/series/${novelInfo?.novelId}/chapter/${num}`}>
+                    Chapter {num}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </>
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
   );
 };
