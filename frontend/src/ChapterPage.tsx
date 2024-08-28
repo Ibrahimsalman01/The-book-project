@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { getChapter, getTotalChapters } from "../services/novels";
 import { ChapterNavigationBar } from "./components/ChapterNagivationBar";
 import "./ChapterPage.css";
+
 
 export interface novelObject {
   novelId: number,
@@ -12,37 +14,49 @@ export interface novelObject {
 }
 
 const ChapterPage = () => {
+  const { novelId, chapterId } = useParams<{novelId: string, chapterId: string}>();
   const [chapter, setChapter] = useState<novelObject>();
-  const [currentChapter, setCurrentChapter] = useState<number>(1);
-  const [totalChapters, setTotalChapters] = useState<number>(0); //used to hold current number of chapters for novel
+  const [currentChapter, setCurrentChapter] = useState<number>(0);
+  const [totalChapters, setTotalChapters] = useState<number>(0); // used to hold current number of chapters for novel
+  const navigate = useNavigate();
 
-  const getNovelChapter = useCallback(async (novelId: number, chapterNumber: number) => {
-    const response = await getChapter(novelId, chapterNumber);
-    setChapter(response as novelObject);
-  }, []);
+
+  const getNovelChapter = useCallback(async () => {
+    if (novelId && chapterId) {
+      const response = await getChapter(Number(novelId), Number(chapterId));
+      const chapterData = response as novelObject;
+      setChapter(chapterData);
+      setCurrentChapter(chapterData.chapterNumber);
+    }
+  }, [novelId, chapterId]);
 
   const handlePrevChapter = () => {
-    setCurrentChapter((prev) => Math.max(prev - 1, 1));
+    if (currentChapter > 1) {
+      navigate(`/series/${novelId}/chapter/${currentChapter - 1}`);
+    }
   };
 
   const handleNextChapter = async () => {
-    setCurrentChapter((prev) => Math.min(prev + 1, totalChapters));
+    if (currentChapter < totalChapters) {
+      navigate(`/series/${novelId}/chapter/${currentChapter + 1}`);
+    }
   };
 
   const fetchTotalChapters = async () => {
     try {
-      const total = await getTotalChapters(1);
+      const total = await getTotalChapters(Number(novelId));
       setTotalChapters(total);
     } catch (error) {
       console.error('Error fetching total chapters:', error);
     }
   };
 
-  useEffect(() => {  
-    fetchTotalChapters();
-    getNovelChapter(1, currentChapter);
-    
-  }, [getNovelChapter, currentChapter]);
+  useEffect(() => {
+    if (novelId && chapterId) {
+      fetchTotalChapters();
+      getNovelChapter();
+    }
+  }, [novelId, chapterId, getNovelChapter]);
 
   return (
     <div className="chapter-page">
@@ -50,14 +64,14 @@ const ChapterPage = () => {
         The Book Project
       </div>
       <div className="series-info">
-        {`Home > ${chapter?.seriesName} > Chapter ${currentChapter}`}
+        {`Home > ${chapter?.seriesName} > Chapter ${chapter?.chapterNumber}`}
       </div>
       <ChapterNavigationBar
         handlePrevChapter={handlePrevChapter}
         handleNextChapter={handleNextChapter}
         currentChapter={currentChapter}
         totalChapters={totalChapters}
-        selectBarChapter={(e) => setCurrentChapter(Number(e.target.value.split(" ")[1]))}
+        selectBarChapter={(e) => navigate(`/series/${novelId}/chapter/${e.target.value.split(" ")[1]}`)}
       />
       <div className="chapter">
         {chapter?.pages.map((page, index) => (
